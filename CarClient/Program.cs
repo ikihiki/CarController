@@ -17,7 +17,7 @@ namespace CarClient
         {
             if (!File.Exists(SettingFileName))
             {
-                var settings = new Settings() { CarName = "carName", HubName = "hubName", Url = "http://url" };
+                var settings = new Settings() { CarName = "carName", HubName = "hubName", Url = "http://url", ServoPin = "7", ServoLeft = "0", ServoRight = "100", ServoStraight = "50" };
                 using (var file = File.Create(SettingFileName))
                 {
                     using (var writer = new StreamWriter(file))
@@ -31,12 +31,14 @@ namespace CarClient
 
 
             HubConnector connector;
+            CommandExecuter executer;
             try
             {
                 using (var file = File.OpenText(SettingFileName))
                 {
                     var setting = JsonConvert.DeserializeObject<Settings>(file.ReadToEnd());
                     connector = new HubConnector(setting.Url, setting.HubName, setting.CarName);
+                    executer = new CommandExecuter(setting);
                 }
                 connector.ConectStart().Wait();
             }
@@ -45,9 +47,6 @@ namespace CarClient
                 Console.WriteLine(ex);
                 return;
             }
-
-            CommandExecuter executer = new CommandExecuter();
-
 
             try
             {
