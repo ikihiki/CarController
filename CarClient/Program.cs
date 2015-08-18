@@ -69,7 +69,16 @@ namespace CarClient
                 {
                     source?.Cancel();
                     source = new System.Threading.CancellationTokenSource();
-                    executer.Excute(command, source.Token);
+                    connector.StartExcuting();
+                    executer.Excute(command, source.Token).ContinueWith(t => connector.EndExcuting()).Start();
+                };
+
+                connector.AbortExcuting += () =>
+                {
+                    if(!source.IsCancellationRequested)
+                    {
+                        source.Cancel();
+                    }
                 };
 
                 connector.Shutdown += () =>

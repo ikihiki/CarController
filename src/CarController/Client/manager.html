@@ -52,6 +52,8 @@
                     <th>Name</th>
                     <th>IsConnected</th>
                     <th>ConnectedClientID</th>
+                    <th>IsExcuting</th>
+                    <th>AbortExcuting</th>
                     <th>DisconnectFromClient</th>
                     <th>Disconnect</th>
                     <th>Shutdown</th>
@@ -65,6 +67,8 @@
                     <td>{{car.Name}}</td>
                     <td>{{car.IsConnected}}</td>
                     <td>{{car.ConnectedClient}}</td>
+                    <th>{{car.IsExcuting}}</th>
+                    <td><button class="btn btn-danger" ng-disabled="!car.IsExcuting" ng-click="abortExcuting(car.ConnectedID)">Abort</button></td>
                     <td><button class="btn btn-danger" ng-disabled="!car.IsConnected" ng-click="disconnectFromClient(car.ConnectedClient)">Disconnect</button></td>
                     <td><button class="btn btn-danger" ng-click="disconnectCar(car.ConnectedID)">Disconnect</button></td>
                     <td><button class="btn btn-danger" ng-click="shutdownCar(car.ConnectedID)">Shotdown</button></td>

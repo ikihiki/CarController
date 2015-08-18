@@ -20,6 +20,7 @@ namespace CarClient
         public event Action<string> ConnectingToClient;
         public event Action DisconnectingFromClient;
         public event Action<Command[]> GetCommand;
+        public event Action AbortExcuting;
         public event Action Shutdown;
         public event Action Reboot;
 
@@ -51,6 +52,11 @@ namespace CarClient
                 }
             });
 
+            proxy.On("AbortExcuting", () =>
+             {
+                 AbortExcuting?.Invoke();
+             });
+
             proxy.On("Shutdown", () =>
             {
                 Shutdown?.Invoke();
@@ -80,6 +86,16 @@ namespace CarClient
         public async Task SentMessage(string message)
         {
             await proxy.Invoke("SentMessageFromClient", message);
+        }
+
+        public async Task StartExcuting()
+        {
+            await proxy.Invoke("StartExcuting");
+        }
+
+        public async Task EndExcuting()
+        {
+            await proxy.Invoke("EndExcuting");
         }
     }
 }

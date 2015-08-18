@@ -25,6 +25,8 @@ namespace CarController.Hubs
         /// </summary>
         public string ConnectedClient { get; set; }
 
+        public bool IsExcuting { get; set; }
+
         /// <summary>
         /// 車のニックネームを取得または設定します。
         /// </summary>
@@ -158,5 +160,46 @@ namespace CarController.Hubs
         {
             Clients.Client(id).Reboot();
         }
+
+        public void StartExcuting()
+        {
+            lock(carKey)
+            {
+                if(cars.ContainsKey(Context.ConnectionId))
+                {
+                    cars[Context.ConnectionId].IsExcuting = true;
+                    ChangeCars(cars.Select(kvp => kvp.Value).ToArray());
+                }
+            }
+        }
+
+        public void EndExcuting()
+        {
+            lock (carKey)
+            {
+                if (cars.ContainsKey(Context.ConnectionId))
+                {
+                    cars[Context.ConnectionId].IsExcuting = false;
+                    ChangeCars(cars.Select(kvp => kvp.Value).ToArray());
+                }
+            }
+        }
+
+        public void AbortExcuting()
+        {
+            lock(clientKey)
+            {
+                if(clients.ContainsKey(Context.ConnectionId))
+                {
+                    AbortExcuting(clients[Context.ConnectionId].ConnectedCar);
+                }
+            }
+        }
+
+        public void AbortExcuting(string id)
+        {
+            Clients.Client(id).AbortExcuting();
+        }
+
     }
 }

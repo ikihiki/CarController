@@ -3,6 +3,7 @@
         ConnectedID: string;
         IsConnected: boolean;
         ConnectedClient: string;
+        IsExcuting: boolean;
         Name: string;
     }
 

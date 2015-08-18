@@ -5,7 +5,7 @@
 module App {
     export interface MainScope extends ng.IScope {
         states: string;
-        carName: string;
+        connectedCar: App.Structure.Car;
         cars: App.Structure.Car[];
         connect: Function;
         disconnect: Function;
@@ -16,12 +16,13 @@ module App {
         allRemove: Function;
         checkLength: Function;
         sent: Function;
+        abort: Function;
     }
 
     export class MainController {
         constructor(public $scope: MainScope, public proxy: HubConnection) {
             $scope.states = "disconnected";
-            $scope.carName = "";
+            $scope.connectedCar = undefined;
             $scope.cars = [];
             $scope.commands = [];
             $scope.verbs = [];
@@ -39,9 +40,18 @@ module App {
             $scope.allRemove = angular.bind(this, this.allRemove);
             $scope.checkLength = angular.bind(this, this.checkLength);
             $scope.sent = angular.bind(this, this.sent);
+            $scope.abort = angular.bind(this, this.abort);
 
             proxy.ChangeCars = cars=> {
                 $scope.cars = cars;
+                if ($scope.states == "connected") {
+                    for (var car in this.$scope.cars) {
+                        if ($scope.cars[car].ConnectedID == $scope.connectedCar.ConnectedID) {
+                            $scope.connectedCar = $scope.cars[car];
+                            break;
+                        }
+                    }
+                }
                 $scope.$apply();
             }
 
@@ -60,15 +70,15 @@ module App {
                 if (result) {
                     this.$scope.states = "connected";
                     for (var car in this.$scope.cars) {
-                        if (car.ConnectedID == id) {
-                            this.$scope.carName = car.Name;
+                        if (this.$scope.cars[car].ConnectedID == id) {
+                            this.$scope.connectedCar = this.$scope.cars[car];
                             break;
                         }
                     }
                     this.$scope.commands = [];
                 } else {
                     this.$scope.states = "disconnected";
-                    this.$scope.carName = "";
+                    this.$scope.connectedCar = undefined;
                 }
             });
             this.$scope.states = "connecting";
@@ -93,10 +103,6 @@ module App {
         }
 
         checkLength(value: number, index: number): boolean {
-            //if (this.$scope.commands.length == 0) {
-            //    return true;
-            //}
-
             let length: number = 0;
             for (var i = 0; i < this.$scope.commands.length; i++) {
                 if (i == index) {
@@ -112,6 +118,10 @@ module App {
 
         sent(): void {
             this.proxy.sentCommandsToCar(this.$scope.commands);
+        }
+
+        abort(): void {
+            this.proxy.abortExcuting();
         }
     }
 
@@ -163,6 +173,9 @@ module App {
         }
         sentCommandsToCar(commands: App.Structure.Command[]): JQueryDeferred<boolean> {
             return this.connection.invoke("SentCommandsToCar", commands);
+        }
+        abortExcuting(): void {
+            this.connection.invoke("AbortExcuting");
         }
     }
 }

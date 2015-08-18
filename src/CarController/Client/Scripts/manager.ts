@@ -11,6 +11,7 @@ module App.Manager {
         cars: App.Structure.Car[];
         disconnectFromClient: Function;
         disconnectCar: Function;
+        abortExcuting: Function;
         shutdownCar: Function;
         rebootCar: Function;
         reset: Function;
@@ -26,6 +27,7 @@ module App.Manager {
             $scope.reset = angular.bind(this, this.reset);
             $scope.disconnectFromClient = angular.bind(this, this.disconnectFromClient);
             $scope.disconnectCar = angular.bind(this, this.disconnectCar);
+            $scope.abortExcuting = angular.bind(this, this.abortExcuting);
             $scope.shutdownCar = angular.bind(this, this.shutdownCar);
             $scope.rebootCar = angular.bind(this, this.rebootCar);
 
@@ -62,6 +64,10 @@ module App.Manager {
 
         disconnectCar(id: string): void {
             this.proxy.disconnectCar(id);
+        }
+
+        abortExcuting(id: string): void {
+            this.proxy.abortExcuting(id);
         }
 
         shutdownCar(id: string): void {
@@ -130,6 +136,10 @@ module App.Manager {
 
         public disconnectCar(id: string): void {
             this.connection.invoke("DisconnectCar", id);
+        }
+
+        public abortExcuting(id: string) {
+            this.connection.invoke("AbortExcuting", id);
         }
 
         public shutdownCar(id: string): void {
