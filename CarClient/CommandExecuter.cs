@@ -19,11 +19,11 @@ namespace CarClient
         public CommandExecuter(Settings setting)
         {
             this.setting = setting;
-            //pin1 = ConnectorPin.P1Pin38.Output();
-            //pin2 = ConnectorPin.P1Pin40.Output();
-            //connection = new GpioConnection(pin1, pin2);
-            //survoWriter = new StreamWriter("/dev/servoblaster");
-            //survoWriter.AutoFlush = true;
+            pin1 = ConnectorPin.P1Pin38.Output();
+            pin2 = ConnectorPin.P1Pin40.Output();
+            connection = new GpioConnection(pin1, pin2);
+            survoWriter = new StreamWriter("/dev/servoblaster");
+            survoWriter.AutoFlush = true;
         }
 
         public async Task Excute(Command[] commands,System.Threading.CancellationToken token)
@@ -78,47 +78,47 @@ namespace CarClient
 
         public void Dispose()
         {
-            //survoWriter.Dispose();
-            //connection.Close();
+            survoWriter.Dispose();
+            connection.Close();
         }
 
         private void Fowerd()
         {
             Console.WriteLine("Fowerd");
-            //connection[pin1] = true;
-            //connection[pin2] = false;
+            connection[pin1] = true;
+            connection[pin2] = false;
         }
 
         private void Back()
         {
             Console.WriteLine("Back");
-            //connection[pin1] = false;
-            //connection[pin2] = true;
+            connection[pin1] = false;
+            connection[pin2] = true;
         }
 
         private void Stop()
         {
             Console.WriteLine("Stop");
-            //connection[pin1] = false;
-            //connection[pin2] = false;
+            connection[pin1] = false;
+            connection[pin2] = false;
         }
 
         private void Right()
         {
             Console.WriteLine("Right");
-            //survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoRight}");
+            survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoRight}");
         }
 
         private void Left()
         {
             Console.WriteLine("Left");
-            //survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoLeft}");
+            survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoLeft}");
         }
 
         private void Straight()
         {
             Console.WriteLine("Straight");
-            //survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoStraight}");
+            survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoStraight}");
         }
     }
 }

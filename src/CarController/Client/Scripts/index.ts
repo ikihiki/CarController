@@ -5,6 +5,7 @@
 module App {
     export interface MainScope extends ng.IScope {
         states: string;
+        error: string;
         connectedCar: App.Structure.Car;
         cars: App.Structure.Car[];
         connect: Function;
@@ -22,7 +23,8 @@ module App {
 
     export class MainController {
         constructor(public $scope: MainScope, public proxy: HubConnection) {
-            $scope.states = "appstoped";
+            $scope.states = "appluching";
+            $scope.error = "";
             $scope.connectedCar = undefined;
             $scope.cars = [];
             $scope.commands = [];
@@ -71,6 +73,8 @@ module App {
                 $scope.states = "appstoped";
                 this.$scope.$apply();
             }
+
+            proxy.Error = error=> $scope.error += ("\n" + new Date().toString() + "\n" + error + "\n-----------\n");
         }
 
         connect(id: string): void {
@@ -149,10 +153,15 @@ module App {
         public SentDisconnectFromCar: () => void;
         public Disconnected: () => void;
         public Connected: () => void;
+        public Error: (messsage: string) => void;
 
         constructor(private Hub: ngSignalr.HubFactory) {
             this.connection = new Hub("CentralHost", {
-                rootPath: "signalr", 
+                rootPath: "signalr", errorHandler: error=> {
+                    if (this.Error != null) {
+                        this.Error(error);
+                    }
+                },
                 listeners: {
                     "SentDisconnectFromCar": ()=> {
                         this.SentDisconnectFromCar();

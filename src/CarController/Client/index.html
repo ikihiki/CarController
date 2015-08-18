@@ -11,9 +11,15 @@
 </head>
 <body ng-app="app">
     <div id="toplevel" ng-controller="controller" ng-switch on="states">
+        <div ng-switch-when="appluching">
+            アプリケーションを起動しています。
+        </div>
+
         <div ng-switch-when="appstoped">
             アプリケーションは終了したか正常に起動しませんでした。<br />
-            再起動したい場合は更新してください。
+            再起動したい場合は更新してください。<br />
+            Log:<br />
+            <pre>{{error}}</pre>
         </div>
 
         <div ng-switch-when="connecting">

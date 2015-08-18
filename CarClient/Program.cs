@@ -17,7 +17,7 @@ namespace CarClient
         {
             if (!File.Exists(SettingFileName))
             {
-                var settings = new Settings() { CarName = "carName", HubName = "hubName", Url = "http://url", ServoPin = "7", ServoLeft = "0", ServoRight = "100", ServoStraight = "50" };
+                var settings = new Settings() { CarName = "carName", HubName = "CentralHost", Url = "http://url", ServoPin = "7", ServoLeft = "0", ServoRight = "100", ServoStraight = "50" };
                 using (var file = File.Create(SettingFileName))
                 {
                     using (var writer = new StreamWriter(file))
