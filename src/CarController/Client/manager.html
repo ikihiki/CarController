@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Manager</title>
+    <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+</head>
+<body ng-app="app.manager">
+    <div class="container" ng-controller="controller">
+        <table class="table">
+            <caption>Managers</caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ConnectedID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="manager in managers">
+                    <td>{{$index}}</td>
+                    <td>{{manager.ConnectedID}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table">
+            <caption>Clients</caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ConnectedID</th>
+                    <th>IsConnected</th>
+                    <th>ConnectedCarID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="client in clients">
+                    <td>{{$index}}</td>
+                    <td>{{client.ConnectedID}}</td>
+                    <td>{{client.IsConnected}}</td>
+                    <td>{{client.ConnectedCar}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table">
+            <caption>Cars</caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ConnectedID</th>
+                    <th>Name</th>
+                    <th>IsConnected</th>
+                    <th>ConnectedClientID</th>
+                    <th>DisconnectFromClient</th>
+                    <th>Disconnect</th>
+                    <th>Shutdown</th>
+                    <th>Reboot</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="car in cars">
+                    <td>{{$index}}</td>
+                    <td>{{car.ConnectedID}}</td>
+                    <td>{{car.Name}}</td>
+                    <td>{{car.IsConnected}}</td>
+                    <td>{{car.ConnectedClient}}</td>
+                    <td><button class="btn btn-danger" ng-disabled="!car.IsConnected" ng-click="disconnectFromClient(car.ConnectedClient)">Disconnect</button></td>
+                    <td><button class="btn btn-danger" ng-click="disconnectCar(car.ConnectedID)">Disconnect</button></td>
+                    <td><button class="btn btn-danger" ng-click="shutdownCar(car.ConnectedID)">Shotdown</button></td>
+                    <td><button class="btn btn-danger" ng-click="rebootCar(car.ConnectedID)">Reboot</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div ng-repeat="message in messages">
+            <p>{{message}}</p>
+        </div>
+    </div>
+
+    <script src="lib/jquery/jquery.js"></script>
+    <script src="lib/signalr/jquery.signalR.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-signalr-hub/signalr-hub.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.js"></script>
+    <script src="Scripts/manager.js"></script>
+</body>
+</html>

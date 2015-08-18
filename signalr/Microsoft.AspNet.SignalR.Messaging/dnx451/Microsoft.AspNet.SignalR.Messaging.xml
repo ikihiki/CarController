@@ -1,0 +1,1154 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.AspNet.SignalR.Messaging</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.IMessageBus.Publish(Microsoft.AspNet.SignalR.Messaging.Message)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.IMessageBus.Subscribe(Microsoft.AspNet.SignalR.Messaging.ISubscriber,System.String,System.Func{Microsoft.AspNet.SignalR.Messaging.MessageResult,System.Object,System.Threading.Tasks.Task{System.Boolean}},System.Int32,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="subscriber"></param>
+            <param name="cursor"></param>
+            <param name="callback"></param>
+            <param name="maxMessages"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.Source">
+            <summary>
+            Which connection the message originated from
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.Key">
+            <summary>
+            The signal for the message (connection id, group, etc)
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.Value">
+            <summary>
+            The message payload
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.CommandId">
+            <summary>
+            The command id if this message is a command
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.WaitForAck">
+            <summary>
+            Determines if the caller should wait for acknowledgement for this message
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.IsAck">
+            <summary>
+            Determines if this message is itself an ACK
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.Filter">
+            <summary>
+            A list of connection ids to filter out
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.Encoding">
+            <summary>
+            The encoding of the message
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.MappingId">
+            <summary>
+            The payload id. Only used in scaleout scenarios
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Message.StreamIndex">
+            <summary>
+            The stream index this message came from. Only used the scaleout scenarios.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Messaging.MessageBroker">
+            <summary>
+            This class is the main coordinator. 
+            It schedules work to be done for a particular subscription. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.MessageBus.Publish(Microsoft.AspNet.SignalR.Messaging.Message)">
+            <summary>
+            Publishes a new message to the specified event on the bus.
+            </summary>
+            <param name="message">The message to publish.</param>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.MessageBus.Subscribe(Microsoft.AspNet.SignalR.Messaging.ISubscriber,System.String,System.Func{Microsoft.AspNet.SignalR.Messaging.MessageResult,System.Object,System.Threading.Tasks.Task{System.Boolean}},System.Int32,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="subscriber"></param>
+            <param name="cursor"></param>
+            <param name="callback"></param>
+            <param name="maxMessages"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.MessageBus.CreateTopic(System.String)">
+            <summary>
+            Creates a topic for the specified key.
+            </summary>
+            <param name="key">The key to create the topic for.</param>
+            <returns>A <see cref="T:Microsoft.AspNet.SignalR.Messaging.Topic"/> for the specified key.</returns>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Messaging.MessageResult">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.MessageResult.Messages">
+            <summary>
+            Gets an <see cref="T:IList{Message}"/> associated with the result.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.MessageResult.#ctor(System.Collections.Generic.IList{System.ArraySegment{Microsoft.AspNet.SignalR.Messaging.Message}},System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNet.SignalR.Messaging.MessageResult"/> struct.
+            </summary>
+            <param name="messages">The array of messages associated with this <see cref="T:Microsoft.AspNet.SignalR.Messaging.MessageResult"/>.</param>
+            <param name="totalCount">The amount of messages populated in the messages array.</param>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Messaging.ScaleoutConfiguration">
+            <summary>
+            Common settings for scale-out message bus implementations.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.ScaleoutConfiguration.QueueBehavior">
+            <summary>
+            Gets or sets a value that represents the queuing behavior for scale-out messages.
+            Defaults to <see cref="F:Microsoft.AspNet.SignalR.QueuingBehavior.InitialOnly">QueuingBehavior.InitialOnly</see>
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.ScaleoutConfiguration.MaxQueueLength">
+            <summary>
+            The maximum length of the outgoing send queue. Messages being sent to the backplane are queued
+            up to this length. After the max length is reached, further sends will throw an <see cref="T:System.InvalidOperationException">InvalidOperationException</see>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessage">
+            <summary>
+            Represents a message to the scaleout backplane
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessage.Messages">
+            <summary>
+            The messages from SignalR
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessage.ServerCreationTime">
+            <summary>
+            The time the message was created on the origin server
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessageBus">
+            <summary>
+            Common base class for scaleout message bus implementations.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessageBus.StreamCount">
+            <summary>
+            The number of streams can't change for the lifetime of this instance.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessageBus.Open(System.Int32)">
+            <summary>
+            Opens the specified queue for sending messages.
+            <param name="streamIndex">The index of the stream to open.</param>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessageBus.Close(System.Int32)">
+            <summary>
+            Closes the specified queue.
+            <param name="streamIndex">The index of the stream to close.</param>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessageBus.OnError(System.Int32,System.Exception)">
+            <summary>
+            Closes the specified queue for sending messages making all sends fail asynchronously.
+            </summary>
+            <param name="streamIndex">The index of the stream to close.</param>
+            <param name="exception">The error that occurred.</param>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessageBus.Send(System.Collections.Generic.IList{Microsoft.AspNet.SignalR.Messaging.Message})">
+            <summary>
+            Sends messages to the backplane
+            </summary>
+            <param name="messages">The list of messages to send</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.ScaleoutMessageBus.OnReceived(System.Int32,System.UInt64,Microsoft.AspNet.SignalR.Messaging.ScaleoutMessage)">
+            <summary>
+            Invoked when a payload is received from the backplane. There should only be one active call at any time.
+            </summary>
+            <param name="streamIndex">id of the stream.</param>
+            <param name="id">id of the payload within that stream.</param>
+            <param name="message">The scaleout message.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Messaging.ScaleoutOptions">
+            <summary>
+            Common settings for scale-out message bus implementations.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.ScaleoutOptions.QueueBehavior">
+            <summary>
+            Gets or sets a value that represents the queuing behavior for scale-out messages.
+            Defaults to <see cref="F:Microsoft.AspNet.SignalR.QueuingBehavior.InitialOnly">QueuingBehavior.InitialOnly</see>
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.ScaleoutOptions.MaxQueueLength">
+            <summary>
+            The maximum length of the outgoing send queue. Messages being sent to the backplane are queued
+            up to this length. After the max length is reached, further sends will throw an <see cref="T:System.InvalidOperationException">InvalidOperationException</see>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.DynamicComment_CallsMethodOnServerSideDeferredPromise">
+            <summary>
+                        /// &lt;summary&gt;Calls the {0} method on the server-side {1} hub.&amp;#10;Returns a jQuery.Deferred() promise.&lt;/summary&gt;
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatDynamicComment_CallsMethodOnServerSideDeferredPromise(System.Object,System.Object)">
+            <summary>
+                        /// &lt;summary&gt;Calls the {0} method on the server-side {1} hub.&amp;#10;Returns a jQuery.Deferred() promise.&lt;/summary&gt;
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.DynamicComment_ServerSideTypeIs">
+            <summary>
+                        /// &lt;param name=\"{0}\" type=\"{1}\"&gt;Server side type is {2}&lt;/param&gt;
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatDynamicComment_ServerSideTypeIs(System.Object,System.Object,System.Object)">
+            <summary>
+                        /// &lt;param name=\"{0}\" type=\"{1}\"&gt;Server side type is {2}&lt;/param&gt;
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_AmbiguousMessage">
+            <summary>
+            Ambiguous message. Unable to send to both '{0}' and '{1}'.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_AmbiguousMessage(System.Object,System.Object)">
+            <summary>
+            Ambiguous message. Unable to send to both '{0}' and '{1}'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ArgumentNullOrEmpty">
+            <summary>
+            Argument cannot be null or empty
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ArgumentNullOrEmpty">
+            <summary>
+            Argument cannot be null or empty
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_BufferSizeOutOfRange">
+            <summary>
+            The buffer size '{0}' is out of range.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_BufferSizeOutOfRange(System.Object)">
+            <summary>
+            The buffer size '{0}' is out of range.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_CallerNotAuthorizedToInvokeMethodOn">
+            <summary>
+            Caller is not authorized to invoke the {0} method on {1}.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_CallerNotAuthorizedToInvokeMethodOn(System.Object,System.Object)">
+            <summary>
+            Caller is not authorized to invoke the {0} method on {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ConnectionIdIncorrectFormat">
+            <summary>
+            The ConnectionId is in the incorrect format.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ConnectionIdIncorrectFormat">
+            <summary>
+            The ConnectionId is in the incorrect format.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ConnectionNotInitialized">
+            <summary>
+            The PersistentConnection is not initialized.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ConnectionNotInitialized">
+            <summary>
+            The PersistentConnection is not initialized.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_DisconnectTimeoutCannotBeConfiguredAfterKeepAlive">
+            <summary>
+            DisconnectTimeout cannot be configured after the KeepAlive.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_DisconnectTimeoutCannotBeConfiguredAfterKeepAlive">
+            <summary>
+            DisconnectTimeout cannot be configured after the KeepAlive.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_DisconnectTimeoutMustBeAtLeastSixSeconds">
+            <summary>
+            DisconnectTimeout must be at least six seconds.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_DisconnectTimeoutMustBeAtLeastSixSeconds">
+            <summary>
+            DisconnectTimeout must be at least six seconds.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_DoNotReadRequireOutgoing">
+            <summary>
+            Do not read RequireOutgoing. Use protected _requireOutgoing instead.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_DoNotReadRequireOutgoing">
+            <summary>
+            Do not read RequireOutgoing. Use protected _requireOutgoing instead.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_DuplicateHubNames">
+            <summary>
+            Two Hubs must not share the same name. '{0}' and '{1}' both share the name '{2}'.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_DuplicateHubNames(System.Object,System.Object,System.Object)">
+            <summary>
+            Two Hubs must not share the same name. '{0}' and '{1}' both share the name '{2}'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_DuplicateHubNamesInConnectionData">
+            <summary>
+            Duplicate Hub names found.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_DuplicateHubNamesInConnectionData">
+            <summary>
+            Duplicate Hub names found.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_DuplicatePayloadsForStream">
+            <summary>
+            Duplicate payload id detected for stream '{0}'.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_DuplicatePayloadsForStream(System.Object)">
+            <summary>
+            Duplicate payload id detected for stream '{0}'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ExceptionContextCanOnlyBeModifiedOnce">
+            <summary>
+            The ExceptionContext has already been modified once and cannot be modified again.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ExceptionContextCanOnlyBeModifiedOnce">
+            <summary>
+            The ExceptionContext has already been modified once and cannot be modified again.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_HubCouldNotBeResolved">
+            <summary>
+            '{0}' Hub could not be resolved.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_HubCouldNotBeResolved(System.Object)">
+            <summary>
+            '{0}' Hub could not be resolved.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_HubInvocationFailed">
+            <summary>
+            There was an error invoking Hub method '{0}.{1}'.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_HubInvocationFailed(System.Object,System.Object)">
+            <summary>
+            There was an error invoking Hub method '{0}.{1}'.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_HubProgressOnlyReportableBeforeMethodReturns">
+            <summary>
+            You cannot report progress on a hub method invocation that has already completed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_HubProgressOnlyReportableBeforeMethodReturns">
+            <summary>
+            You cannot report progress on a hub method invocation that has already completed.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_InvalidCursorFormat">
+            <summary>
+            Invalid cursor.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_InvalidCursorFormat">
+            <summary>
+            Invalid cursor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_InvalidForeverFrameId">
+            <summary>
+            The supplied frameId is in the incorrect format.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_InvalidForeverFrameId">
+            <summary>
+            The supplied frameId is in the incorrect format.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_IsNotA">
+            <summary>
+            '{0}' is not a {1}.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_IsNotA(System.Object,System.Object)">
+            <summary>
+            '{0}' is not a {1}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_JavaScriptProxyDisabled">
+            <summary>
+            SignalR: JavaScript Hub proxy generation has been disabled.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_JavaScriptProxyDisabled">
+            <summary>
+            SignalR: JavaScript Hub proxy generation has been disabled.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_KeepAliveMustBeGreaterThanTwoSeconds">
+            <summary>
+            KeepAlive value must be greater than two seconds.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_KeepAliveMustBeGreaterThanTwoSeconds">
+            <summary>
+            KeepAlive value must be greater than two seconds.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_KeepAliveMustBeNoMoreThanAThirdOfTheDisconnectTimeout">
+            <summary>
+            KeepAlive value must be no more than a third of the DisconnectTimeout.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_KeepAliveMustBeNoMoreThanAThirdOfTheDisconnectTimeout">
+            <summary>
+            KeepAlive value must be no more than a third of the DisconnectTimeout.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_MethodCouldNotBeResolved">
+            <summary>
+            '{0}' method could not be resolved. No method found with that name.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_MethodCouldNotBeResolved(System.Object)">
+            <summary>
+            '{0}' method could not be resolved. No method found with that name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_MethodCouldNotBeResolvedCandidates">
+            <summary>
+            '{0}' method could not be resolved. Potential candidates are: {1}
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_MethodCouldNotBeResolvedCandidates(System.Object,System.Object)">
+            <summary>
+            '{0}' method could not be resolved. Potential candidates are: {1}
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_MethodLevelOutgoingAuthorization">
+            <summary>
+            Outgoing authorization can only be required for an entire Hub, not a specific method.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_MethodLevelOutgoingAuthorization">
+            <summary>
+            Outgoing authorization can only be required for an entire Hub, not a specific method.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_MethodMustNotTakeOutParameter">
+            <summary>
+            The '{0}' parameter of '{1}.{2}' must not be an out parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_MethodMustNotTakeOutParameter(System.Object,System.Object,System.Object)">
+            <summary>
+            The '{0}' parameter of '{1}.{2}' must not be an out parameter.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_MethodMustNotTakeRefParameter">
+            <summary>
+            The '{0}' parameter of '{1}.{2}' must not be a ref parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_MethodMustNotTakeRefParameter(System.Object,System.Object,System.Object)">
+            <summary>
+            The '{0}' parameter of '{1}.{2}' must not be a ref parameter.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_MethodMustReturnVoidOrTask">
+            <summary>
+            The return type of '{0}.{1}' must be void or Task.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_MethodMustReturnVoidOrTask(System.Object,System.Object)">
+            <summary>
+            The return type of '{0}.{1}' must be void or Task.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_MultipleActivatorsAreaRegisteredCallGetServices">
+            <summary>
+            Multiple activators for type {0} are registered. Please call GetServices instead.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_MultipleActivatorsAreaRegisteredCallGetServices(System.Object)">
+            <summary>
+            Multiple activators for type {0} are registered. Please call GetServices instead.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_NoConfiguration">
+            <summary>
+            A configuration object must be specified.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_NoConfiguration">
+            <summary>
+            A configuration object must be specified.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_NoDependencyResolver">
+            <summary>
+            A dependency resolver must be specified.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_NoDependencyResolver">
+            <summary>
+            A dependency resolver must be specified.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_NoTransportsEnabled">
+            <summary>
+            No transports have been enabled. There must be at least one enabled transport.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_NoTransportsEnabled">
+            <summary>
+            No transports have been enabled. There must be at least one enabled transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_NotWebSocketRequest">
+            <summary>
+            Not a valid web socket request.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_NotWebSocketRequest">
+            <summary>
+            Not a valid web socket request.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ParseObjectFailed">
+            <summary>
+            Unexpected end when reading object.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ParseObjectFailed">
+            <summary>
+            Unexpected end when reading object.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ProtocolErrorMissingConnectionToken">
+            <summary>
+            Protocol error: Missing connection token.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ProtocolErrorMissingConnectionToken">
+            <summary>
+            Protocol error: Missing connection token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ProtocolErrorUnknownTransport">
+            <summary>
+            Protocol error: Unknown transport.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ProtocolErrorUnknownTransport">
+            <summary>
+            Protocol error: Unknown transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_ScaleoutQueuingConfig">
+            <summary>
+            Scaleout queuing is enabled but maximum queue size is 0
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_ScaleoutQueuingConfig">
+            <summary>
+            Scaleout queuing is enabled but maximum queue size is 0
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_StateExceededMaximumLength">
+            <summary>
+            State has exceeded the maximum length of 4096 bytes.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_StateExceededMaximumLength">
+            <summary>
+            State has exceeded the maximum length of 4096 bytes.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_StreamClosed">
+            <summary>
+            The stream has been closed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_StreamClosed">
+            <summary>
+            The stream has been closed.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_StreamNotOpen">
+            <summary>
+            The stream is not open.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_StreamNotOpen">
+            <summary>
+            The stream is not open.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_TaskQueueFull">
+            <summary>
+            The queue is full.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_TaskQueueFull">
+            <summary>
+            The queue is full.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_TypeMustBeInterface">
+            <summary>
+            The type T, '{0}', passed to Hub&lt;T&gt; must be an interface.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_TypeMustBeInterface(System.Object)">
+            <summary>
+            The type T, '{0}', passed to Hub&lt;T&gt; must be an interface.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_TypeMustNotContainEvents">
+            <summary>
+            The interface '{0}' must not contain any events.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_TypeMustNotContainEvents(System.Object)">
+            <summary>
+            The interface '{0}' must not contain any events.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_TypeMustNotContainProperties">
+            <summary>
+            The interface '{0}' must not contain any properties.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_TypeMustNotContainProperties(System.Object)">
+            <summary>
+            The interface '{0}' must not contain any properties.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_UnableToAddModulePiplineAlreadyInvoked">
+            <summary>
+            Unable to add module. The HubPipeline has already been invoked.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_UnableToAddModulePiplineAlreadyInvoked">
+            <summary>
+            Unable to add module. The HubPipeline has already been invoked.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_UnrecognizedUserIdentity">
+            <summary>
+            Unrecognized user identity.  The user identity cannot change during an active SignalR connection.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_UnrecognizedUserIdentity">
+            <summary>
+            Unrecognized user identity.  The user identity cannot change during an active SignalR connection.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_UsingHubInstanceNotCreatedUnsupported">
+            <summary>
+            Using a Hub instance not created by the HubPipeline is unsupported.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_UsingHubInstanceNotCreatedUnsupported">
+            <summary>
+            Using a Hub instance not created by the HubPipeline is unsupported.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Error_WebSocketsNotSupported">
+            <summary>
+            WebSockets is not supported.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatError_WebSocketsNotSupported">
+            <summary>
+            WebSockets is not supported.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Messaging.Resources.Forbidden_JSONPDisabled">
+            <summary>
+            Forbidden: JSONP is disabled.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Messaging.Resources.FormatForbidden_JSONPDisabled">
+            <summary>
+            Forbidden: JSONP is disabled.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Minify(System.String)">
+            <summary>
+            Minifies a string in a way that can be reversed by this instance of <see cref="T:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier"/>.
+            </summary>
+            <param name="value">The string to be minified</param>
+            <returns>A minified representation of the <paramref name="value"/> without the following characters:,|\</returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Unminify(System.String)">
+            <summary>
+            Reverses a <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Minify(System.String)"/> call that was executed at least once previously on this instance of
+            <see cref="T:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier"/> without any subsequent calls to <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.RemoveUnminified(System.String)"/> sharing the
+            same argument as the <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Minify(System.String)"/> call that returned <paramref name="value"/>.
+            </summary>
+            <param name="value">
+            A minified string that was returned by a previous call to <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Minify(System.String)"/>.
+            </param>
+            <returns>
+            The argument of all previous calls to <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Minify(System.String)"/> that returned <paramref name="value"/>.
+            If every call to <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Minify(System.String)"/> on this instance of <see cref="T:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier"/> has never
+            returned <paramref name="value"/> or if the most recent call to <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Minify(System.String)"/> that did
+            return <paramref name="value"/> was followed by a call to <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.RemoveUnminified(System.String)"/> sharing 
+            the same argument, <see cref="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.Unminify(System.String)"/> may return null but must not throw.
+            </returns>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Infrastructure.IStringMinifier.RemoveUnminified(System.String)">
+            <summary>
+            A call to this function indicates that any future attempt to unminify strings that were previously minified
+            from <paramref name="value"/> may be met with a null return value. This provides an opportunity clean up
+            any internal data structures that reference <paramref name="value"/>.
+            </summary>
+            <param name="value">The string that may have previously have been minified.</param>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager">
+            <summary>
+            Provides access to performance counters.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsConnected">
+            <summary>
+            Gets the performance counter representing the total number of connection Connect events since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsReconnected">
+            <summary>
+            Gets the performance counter representing the total number of connection Reconnect events since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsDisconnected">
+            <summary>
+            Gets the performance counter representing the total number of connection Disconnect events since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsCurrentForeverFrame">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using ForeverFrame transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsCurrentLongPolling">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using LongPolling transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsCurrentServerSentEvents">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using ServerSentEvents transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsCurrentWebSockets">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using WebSockets transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionsCurrent">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionMessagesReceivedTotal">
+            <summary>
+            Gets the performance counter representing the total number of messages received by connections (server to client) since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionMessagesSentTotal">
+            <summary>
+            Gets the performance counter representing the total number of messages received by connections (server to client) since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionMessagesReceivedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages received by connections (server to client) per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ConnectionMessagesSentPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages sent by connections (client to server) per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusMessagesReceivedTotal">
+            <summary>
+            Gets the performance counter representing the total number of messages received by subscribers since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusMessagesReceivedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages received by a subscribers per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ScaleoutMessageBusMessagesReceivedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages received by the scaleout message bus per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusMessagesPublishedTotal">
+            <summary>
+            Gets the performance counter representing the total number of messages published to the message bus since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusMessagesPublishedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages published to the message bus per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusSubscribersCurrent">
+            <summary>
+            Gets the performance counter representing the current number of subscribers to the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusSubscribersTotal">
+            <summary>
+            Gets the performance counter representing the total number of subscribers to the message bus since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusSubscribersPerSec">
+            <summary>
+            Gets the performance counter representing the number of new subscribers to the message bus per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusAllocatedWorkers">
+            <summary>
+            Gets the performance counter representing the number of workers allocated to deliver messages in the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusBusyWorkers">
+            <summary>
+            Gets the performance counter representing the number of workers currently busy delivering messages in the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.MessageBusTopicsCurrent">
+            <summary>
+            Gets the performance counter representing representing the current number of topics in the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsAllTotal">
+            <summary>
+            Gets the performance counter representing the total number of all errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsAllPerSec">
+            <summary>
+            Gets the performance counter representing the number of all errors processed per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsHubResolutionTotal">
+            <summary>
+            Gets the performance counter representing the total number of hub resolution errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsHubResolutionPerSec">
+            <summary>
+            Gets the performance counter representing the number of hub resolution errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsHubInvocationTotal">
+            <summary>
+            Gets the performance counter representing the total number of hub invocation errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsHubInvocationPerSec">
+            <summary>
+            Gets the performance counter representing the number of hub invocation errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsTransportTotal">
+            <summary>
+            Gets the performance counter representing the total number of transport errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ErrorsTransportPerSec">
+            <summary>
+            Gets the performance counter representing the number of transport errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ScaleoutStreamCountTotal">
+            <summary>
+            Gets the performance counter representing the number of logical streams in the currently configured scaleout message bus provider.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ScaleoutStreamCountOpen">
+            <summary>
+            Gets the performance counter representing the number of logical streams in the currently configured scaleout message bus provider that are in the open state.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ScaleoutStreamCountBuffering">
+            <summary>
+            Gets the performance counter representing the number of logical streams in the currently configured scaleout message bus provider that are in the buffering state.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ScaleoutErrorsTotal">
+            <summary>
+            Gets the performance counter representing the total number of scaleout errors since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ScaleoutErrorsPerSec">
+            <summary>
+            Gets the performance counter representing the number of scaleout errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.IPerformanceCounterManager.ScaleoutSendQueueLength">
+            <summary>
+            Gets the performance counter representing the current scaleout send queue length.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager">
+            <summary>
+            Manages performance counters using Windows performance counters.
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.CategoryName">
+            <summary>
+            The performance counter category name for SignalR counters.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.#ctor(Microsoft.Framework.Logging.ILoggerFactory)">
+            <summary>
+            Creates a new instance.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsConnected">
+            <summary>
+            Gets the performance counter representing the total number of connection Connect events since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsReconnected">
+            <summary>
+            Gets the performance counter representing the total number of connection Reconnect events since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsDisconnected">
+            <summary>
+            Gets the performance counter representing the total number of connection Disconnect events since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsCurrentForeverFrame">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using the ForeverFrame transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsCurrentLongPolling">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using the LongPolling transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsCurrentServerSentEvents">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using the ServerSentEvents transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsCurrentWebSockets">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected using the WebSockets transport.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionsCurrent">
+            <summary>
+            Gets the performance counter representing the number of connections currently connected.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionMessagesReceivedTotal">
+            <summary>
+            Gets the performance counter representing the toal number of messages received by connections (server to client) since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionMessagesSentTotal">
+            <summary>
+            Gets the performance counter representing the total number of messages sent by connections (client to server) since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionMessagesReceivedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages received by connections (server to client) per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ConnectionMessagesSentPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages sent by connections (client to server) per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusMessagesReceivedTotal">
+            <summary>
+            Gets the performance counter representing the total number of messages received by subscribers since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusMessagesReceivedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages received by a subscribers per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ScaleoutMessageBusMessagesReceivedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages received by the scaleout message bus per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusMessagesPublishedTotal">
+            <summary>
+            Gets the performance counter representing the total number of messages published to the message bus since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusMessagesPublishedPerSec">
+            <summary>
+            Gets the performance counter representing the number of messages published to the message bus per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusSubscribersCurrent">
+            <summary>
+            Gets the performance counter representing the current number of subscribers to the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusSubscribersTotal">
+            <summary>
+            Gets the performance counter representing the total number of subscribers to the message bus since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusSubscribersPerSec">
+            <summary>
+            Gets the performance counter representing the number of new subscribers to the message bus per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusAllocatedWorkers">
+            <summary>
+            Gets the performance counter representing the number of workers allocated to deliver messages in the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusBusyWorkers">
+            <summary>
+            Gets the performance counter representing the number of workers currently busy delivering messages in the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.MessageBusTopicsCurrent">
+            <summary>
+            Gets the performance counter representing representing the current number of topics in the message bus.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsAllTotal">
+            <summary>
+            Gets the performance counter representing the total number of all errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsAllPerSec">
+            <summary>
+            Gets the performance counter representing the number of all errors processed per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsHubResolutionTotal">
+            <summary>
+            Gets the performance counter representing the total number of hub resolution errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsHubResolutionPerSec">
+            <summary>
+            Gets the performance counter representing the number of hub resolution errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsHubInvocationTotal">
+            <summary>
+            Gets the performance counter representing the total number of hub invocation errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsHubInvocationPerSec">
+            <summary>
+            Gets the performance counter representing the number of hub invocation errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsTransportTotal">
+            <summary>
+            Gets the performance counter representing the total number of transport errors processed since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ErrorsTransportPerSec">
+            <summary>
+            Gets the performance counter representing the number of transport errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ScaleoutStreamCountTotal">
+            <summary>
+            Gets the performance counter representing the number of logical streams in the currently configured scaleout message bus provider.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ScaleoutStreamCountOpen">
+            <summary>
+            Gets the performance counter representing the number of logical streams in the currently configured scaleout message bus provider that are in the open state.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ScaleoutStreamCountBuffering">
+            <summary>
+            Gets the performance counter representing the number of logical streams in the currently configured scaleout message bus provider that are in the buffering state.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ScaleoutErrorsTotal">
+            <summary>
+            Gets the performance counter representing the total number of scaleout errors since the application was started.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ScaleoutErrorsPerSec">
+            <summary>
+            Gets the performance counter representing the number of scaleout errors per second.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNet.SignalR.Infrastructure.PerformanceCounterManager.ScaleoutSendQueueLength">
+            <summary>
+            Gets the performance counter representing the current scaleout send queue length.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNet.SignalR.Infrastructure.Disposer">
+            <summary>
+            Helper class to manage disposing a resource at an arbirtary time
+            </summary>
+        </member>
+    </members>
+</doc>

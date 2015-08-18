@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CarController</title>
+    <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="index.css" rel="stylesheet" />
+
+</head>
+<body ng-app="app">
+    <div id="toplevel" ng-controller="controller" ng-switch on="states">
+        <div id="cartable" ng-switch-when="disconnected">
+            <table class="table">
+                <caption>車を選んでください</caption>
+                <thead>
+                    <tr>
+                        <th>名前</th>
+                        <th>状況</th>
+                        <th>接続</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="car in cars">
+                        <td>{{car.Name}}</td>
+                        <td>{{car.IsConnected? "使用不可能":"使用可能"}}</td>
+                        <td><button class="btn btn-success" ng-disabled="car.IsConnected" ng-click="connect(car.ConnectedID)">接続</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div id="command" ng-switch-when="connected">
+
+            <div id="commandhead" class="row">
+                <button class="btn btn-danger col-lg-4 col-md-4 col-sm-4 col-xs-6" ng-disabled="states!='connected'" ng-click="disconnect()">切断</button>
+
+                <button class="listedit btn btn-danger col-lg-4 col-md-4 col-sm-4 col-xs-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-4" ng-disabled="commands.length == 0" ng-click="allRemove()">すべて削除</button>
+            </div>
+            <div id="commandlistoutside">
+                <form id="commandlistinside" name="commandList">
+                    <ul class="list-group">
+                        <li class="list-group-item form-inline" ng-repeat="command in commands">
+                            <ng-form name="innerForm" class="form-group">
+                                <select class="form-control" ng-model="command.Verb">
+                                    <option ng-repeat="verb in verbs" value="{{$index}}">{{verb}}</option>
+                                </select>
+                                <div class="input-group">
+                                    <input name="time" class="form-control" type="number" min="1" max="60" required ng-model="command.Time" ui-validate="{Time : 'checkLength($value,$index)'}"/>
+                                    <div class="input-group-addon">秒</div>
+                                </div>
+                                <button class="btn btn-danger" ng-click="remove($index)">×</button>
+                                <span class="alert alert-danger" ng-show="innerForm.time.$error.required">秒数を入力してください。</span>
+                                <span class="alert alert-danger" ng-show="innerForm.time.$error.min">1秒以上を指定してください。</span>
+                                <span class="alert alert-danger" ng-show="innerForm.time.$error.max">60秒以下にしてください。</span>
+                            </ng-form>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+
+            <div id="commandfoot" class="row">
+                <span id="grobalerror" class="alert alert-danger" ng-show="commandList.$error.Time">合計で60秒以下にしてください。なっている場合はどこかの秒数を変更してみてください。</span>
+                <button class="btn btn-success col-lg-4 col-md-4 col-sm-4 col-xs-6" ng-disabled="states!='connected'|| commands.length == 0 || !commandList.$valid" ng-click="sent()">送信</button>
+                <button class="btn btn-primary col-lg-4 col-md-4 col-sm-4 col-xs-6 col-lg-offset-4 col-md-offset-4 col-sm-offset-4" ng-click="add()">追加</button>
+            </div>
+
+        </div>
+    </div>
+    <script src="lib/jquery/jquery.js"></script>
+    <script src="lib/signalr/jquery.signalR.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-animate/angular-animate.js"></script>
+    <script src="lib/angular-signalr-hub/signalr-hub.js"></script>
+    <script src="lib/angular-ui-validate/validate.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.js"></script>
+    <script src="Scripts/structures.js"></script>
+    <script src="Scripts/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6A4C28B5-AA09-4E6B-AE88-B1DBF3E6BCC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CE5FEE56-F156-4AF0-8034-3B67483F00BD}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CarController", "src\CarController\CarController.xproj", "{CA3123AA-88CF-4EF3-B90E-3A5198F27663}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarClient", "CarClient\CarClient.csproj", "{B14BE063-09E3-4331-B931-6AC852B78949}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA3123AA-88CF-4EF3-B90E-3A5198F27663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA3123AA-88CF-4EF3-B90E-3A5198F27663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA3123AA-88CF-4EF3-B90E-3A5198F27663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA3123AA-88CF-4EF3-B90E-3A5198F27663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B14BE063-09E3-4331-B931-6AC852B78949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B14BE063-09E3-4331-B931-6AC852B78949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B14BE063-09E3-4331-B931-6AC852B78949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B14BE063-09E3-4331-B931-6AC852B78949}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CA3123AA-88CF-4EF3-B90E-3A5198F27663} = {6A4C28B5-AA09-4E6B-AE88-B1DBF3E6BCC1}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,87 @@
+﻿        .ng-enter,
+        .ng-leave,
+        .ng-move {
+            -webkit-transition: opacity 0.15s linear;
+            transition: opacity 0.15s linear;
+        }
+
+        .ng-enter {
+            opacity: 0;
+        }
+
+            .ng-enter.ng-enter-active {
+                opacity: 1;
+            }
+
+        .ng-leave {
+            opacity: 1;
+        }
+
+            .ng-leave.ng-leave-active {
+                opacity: 0;
+            }
+
+        .ng-move {
+            opacity: .5;
+        }
+
+            .ng-move.ng-move-active {
+                opacity: 1;
+            }
+
+
+        #toplevel {
+            height: 100%;
+            width: 100%;
+        }
+
+        #cartable {
+            width: 100%;
+            box-sizing: border-box;
+            overflow: visible;
+        }
+
+        #command {
+            height: 100%;
+            position: relative;
+        }
+
+        #commandhead {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+        }
+
+        #commandlistoutside {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            height: 100%;
+        }
+
+        #commandlistinside {
+            overflow: auto;
+            height: 100%;
+        }
+
+        #commandfoot {
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+        }
+
+        #grobalerror{
+            position:absolute;
+            top:-40px;
+            left:0px;
+            z-index:2;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
