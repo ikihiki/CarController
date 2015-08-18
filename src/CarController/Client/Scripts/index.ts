@@ -17,11 +17,12 @@ module App {
         checkLength: Function;
         sent: Function;
         abort: Function;
+        end: Function;
     }
 
     export class MainController {
         constructor(public $scope: MainScope, public proxy: HubConnection) {
-            $scope.states = "disconnected";
+            $scope.states = "appstoped";
             $scope.connectedCar = undefined;
             $scope.cars = [];
             $scope.commands = [];
@@ -41,6 +42,7 @@ module App {
             $scope.checkLength = angular.bind(this, this.checkLength);
             $scope.sent = angular.bind(this, this.sent);
             $scope.abort = angular.bind(this, this.abort);
+            $scope.end = angular.bind(this, this.end);
 
             proxy.ChangeCars = cars=> {
                 $scope.cars = cars;
@@ -57,6 +59,16 @@ module App {
 
             proxy.SentDisconnectFromCar = () => {
                 this.$scope.states = "disconnected";
+                this.$scope.$apply();
+            }
+
+            proxy.Connected = () => {
+                this.$scope.states = "disconnected";
+                this.$scope.$apply();
+            }
+
+            proxy.Disconnected = () => {
+                $scope.states = "appstoped";
                 this.$scope.$apply();
             }
         }
@@ -76,6 +88,7 @@ module App {
                         }
                     }
                     this.$scope.commands = [];
+                    this.$scope.$apply();
                 } else {
                     this.$scope.states = "disconnected";
                     this.$scope.connectedCar = undefined;
@@ -123,6 +136,10 @@ module App {
         abort(): void {
             this.proxy.abortExcuting();
         }
+
+        end() {
+            this.proxy.endApp();
+        }
     }
 
     export class HubConnection {
@@ -130,10 +147,12 @@ module App {
 
         public ChangeCars: (managers: App.Structure.Car[]) => void;
         public SentDisconnectFromCar: () => void;
+        public Disconnected: () => void;
+        public Connected: () => void;
 
         constructor(private Hub: ngSignalr.HubFactory) {
             this.connection = new Hub("CentralHost", {
-                rootPath: "signalr", errorHandler: error=> alert(error),
+                rootPath: "signalr", 
                 listeners: {
                     "SentDisconnectFromCar": ()=> {
                         this.SentDisconnectFromCar();
@@ -154,13 +173,18 @@ module App {
                             //your code here
                             break;
                         case $.signalR.connectionState.disconnected:
-                            //your code here
+                            if (this.Disconnected != null) {
+                                this.Disconnected();
+                            }
                             break;
                     }
                 }
             });
         }
         connect(): void {
+            if (this.Connected != null) {
+                this.Connected();
+            }
             this.connection.invoke("ConectAsClient");
             this.connection.invoke("GetCarList").done((cars: App.Structure.Car[]) => this.ChangeCars(cars));
         }
@@ -176,6 +200,10 @@ module App {
         }
         abortExcuting(): void {
             this.connection.invoke("AbortExcuting");
+        }
+
+        endApp() {
+            this.connection.disconnect();
         }
     }
 }

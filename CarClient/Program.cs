@@ -91,6 +91,10 @@ namespace CarClient
                     Console.WriteLine("Reboot");
                 };
 
+                connector.ConnectingToClient += client => Console.WriteLine($"{client} is connected");
+
+                connector.DisconnectingFromClient += () => Console.WriteLine("disconected");
+
                 Console.Read();
             }
             catch (Exception ex)

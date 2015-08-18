@@ -1,87 +1,129 @@
-﻿        .ng-enter,
-        .ng-leave,
-        .ng-move {
-            -webkit-transition: opacity 0.15s linear;
-            transition: opacity 0.15s linear;
-        }
+﻿.ng-enter,
+.ng-leave,
+.ng-move {
+    -webkit-transition: opacity 0.15s linear;
+    transition: opacity 0.15s linear;
+}
 
-        .ng-enter {
-            opacity: 0;
-        }
+.ng-enter {
+    opacity: 0;
+}
 
-            .ng-enter.ng-enter-active {
-                opacity: 1;
-            }
+    .ng-enter.ng-enter-active {
+        opacity: 1;
+    }
 
-        .ng-leave {
-            opacity: 1;
-        }
+.ng-leave {
+    opacity: 1;
+}
 
-            .ng-leave.ng-leave-active {
-                opacity: 0;
-            }
+    .ng-leave.ng-leave-active {
+        opacity: 0;
+    }
 
-        .ng-move {
-            opacity: .5;
-        }
+.ng-move {
+    opacity: .5;
+}
 
-            .ng-move.ng-move-active {
-                opacity: 1;
-            }
+    .ng-move.ng-move-active {
+        opacity: 1;
+    }
 
 
-        #toplevel {
-            height: 100%;
-            width: 100%;
-        }
+#toplevel {
+    height: 100%;
+    width: 100%;
+}
 
-        #cartable {
-            width: 100%;
-            box-sizing: border-box;
-            overflow: visible;
-        }
+#cartable {
+    width: 100%;
+    height:100%;
+    box-sizing: border-box;
+    overflow: visible;
+    position:relative;
+}
 
-        #command {
-            height: 100%;
-            position: relative;
-        }
+#end{
+    position:absolute;
+    bottom:0px;
+    width:100%;
+}
 
-        #commandhead {
-            position: absolute;
-            top: 0px;
-            width: 100%;
-        }
+#command {
+    height: 100%;
+    position: relative;
+}
 
-        #commandlistoutside {
-            padding-top: 40px;
-            padding-bottom: 40px;
-            height: 100%;
-        }
+#commandhead {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
 
-        #commandlistinside {
-            overflow: auto;
-            height: 100%;
-        }
+#commandlistoutside {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    height: 100%;
+}
 
-        #commandfoot {
-            position: absolute;
-            bottom: 0px;
-            width: 100%;
-        }
+#commandlistinside {
+    overflow: auto;
+    height: 100%;
+}
 
-        #grobalerror{
-            position:absolute;
-            top:-40px;
-            left:0px;
-            z-index:2;
-        }
+#delete {
+    width: 40px;
+    height: 40px;
+    display: inline;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+    right: 10px;
+}
 
-        html {
-            height: 100%;
-        }
+#input {
+    width: 100%;
+    margin-right: 40px;
+}
 
-        body {
-            height: 100%;
-            margin-left: 20px;
-            margin-right: 20px;
-        }
+#inputinside {
+    width: 100%;
+    padding-right: 40px;
+}
+
+#verb {
+}
+
+#time {
+}
+
+#error{
+    margin-top:15px;
+    z-index:2
+}
+
+#commandfoot {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+#grobalerror {
+    position: absolute;
+    top: -40px;
+    left: 0px;
+    z-index: 2;
+}
+
+
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+}

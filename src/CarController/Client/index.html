@@ -6,9 +6,19 @@
     <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="index.css" rel="stylesheet" />
 
+    <meta name="viewport" content="width=device-width, height=device-height" />
+
 </head>
 <body ng-app="app">
     <div id="toplevel" ng-controller="controller" ng-switch on="states">
+        <div ng-switch-when="appstoped">
+            アプリケーションは終了したか正常に起動しませんでした。<br />
+            再起動したい場合は更新してください。
+        </div>
+
+        <div ng-switch-when="connecting">
+            Connectiong...
+        </div>
         <div id="cartable" ng-switch-when="disconnected">
             <table class="table">
                 <caption>車を選んでください</caption>
@@ -27,6 +37,7 @@
                     </tr>
                 </tbody>
             </table>
+            <button id="end" class="btn btn-danger" ng-click="end()">終了</button>
         </div>
 
 
@@ -42,17 +53,23 @@
                     <ul class="list-group">
                         <li class="list-group-item form-inline" ng-repeat="command in commands">
                             <ng-form name="innerForm" class="form-group">
-                                <select class="form-control" ng-model="command.Verb">
-                                    <option ng-repeat="verb in verbs" value="{{$index}}">{{verb}}</option>
-                                </select>
-                                <div class="input-group">
-                                    <input name="time" class="form-control" type="number" min="1" max="60" required ng-model="command.Time" ui-validate="{Time : 'checkLength($value,$index)'}"/>
-                                    <div class="input-group-addon">秒</div>
+                                <div id="input">
+                                    <div id="inputinside">
+                                        <select id="verb" class="form-control" ng-model="command.Verb">
+                                            <option ng-repeat="verb in verbs" value="{{$index}}">{{verb}}</option>
+                                        </select>
+                                        <div id="time" class="input-group">
+                                            <input name="time" class="form-control" type="number" min="1" max="60" required ng-model="command.Time" ui-validate="{Time : 'checkLength($value,$index)'}" />
+                                            <span class="input-group-addon">秒</span>
+                                        </div>
+                                    </div>
+                                    <button id="delete" class="btn btn-danger" ng-click="remove($index)">×</button>
                                 </div>
-                                <button class="btn btn-danger" ng-click="remove($index)">×</button>
-                                <span class="alert alert-danger" ng-show="innerForm.time.$error.required">秒数を入力してください。</span>
-                                <span class="alert alert-danger" ng-show="innerForm.time.$error.min">1秒以上を指定してください。</span>
-                                <span class="alert alert-danger" ng-show="innerForm.time.$error.max">60秒以下にしてください。</span>
+                                <div id="error">
+                                    <span class="alert alert-danger" ng-show="innerForm.time.$error.required">秒数を入力してください。</span>
+                                    <span class="alert alert-danger" ng-show="innerForm.time.$error.min">1秒以上を指定してください。</span>
+                                    <span class="alert alert-danger" ng-show="innerForm.time.$error.max">60秒以下にしてください。</span>
+                                </div>
                             </ng-form>
                         </li>
                     </ul>
