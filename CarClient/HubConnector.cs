@@ -30,6 +30,8 @@ namespace CarClient
             proxy = connection.CreateHubProxy(hubName);
             this.carName = carName;
 
+            Console.WriteLine($"url: {url} hubname: {hubName} carname: {carName}");
+
             proxy.On<string>("SentConnectToClient", client =>
             {
                 IsConnecting = true;

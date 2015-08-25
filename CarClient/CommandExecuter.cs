@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Raspberry.IO.GeneralPurpose;
+using System.Diagnostics;
 
 namespace CarClient
 {
     public class CommandExecuter:IDisposable
     {
-        StreamWriter survoWriter;
+        ProcessStartInfo servo;
         GpioConnection connection;
         OutputPinConfiguration pin1, pin2;
         Settings setting;
@@ -19,11 +20,18 @@ namespace CarClient
         public CommandExecuter(Settings setting)
         {
             this.setting = setting;
+
+            servo = new ProcessStartInfo("/bin/bash");
+            servo.UseShellExecute = false;
+            servo.CreateNoWindow = true;
+            servo.RedirectStandardOutput = true;
+            servo.RedirectStandardError = true;
+         
+#if !DEBUG
             pin1 = ConnectorPin.P1Pin38.Output();
             pin2 = ConnectorPin.P1Pin40.Output();
             connection = new GpioConnection(pin1, pin2);
-            survoWriter = new StreamWriter("/dev/servoblaster");
-            survoWriter.AutoFlush = true;
+#endif
         }
 
         public async Task Excute(Command[] commands,System.Threading.CancellationToken token)
@@ -78,47 +86,81 @@ namespace CarClient
 
         public void Dispose()
         {
-            survoWriter.Dispose();
+#if !DEBUG
             connection.Close();
+#endif
         }
 
         private void Fowerd()
         {
             Console.WriteLine("Fowerd");
+#if !DEBUG
             connection[pin1] = true;
             connection[pin2] = false;
+#endif
         }
 
         private void Back()
         {
             Console.WriteLine("Back");
+#if !DEBUG
             connection[pin1] = false;
             connection[pin2] = true;
+#endif
         }
 
         private void Stop()
         {
             Console.WriteLine("Stop");
+#if !DEBUG
             connection[pin1] = false;
             connection[pin2] = false;
+#endif
         }
 
         private void Right()
         {
             Console.WriteLine("Right");
-            survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoRight}");
+#if !DEBUG
+            servo.Arguments = $"-c 'echo {setting.ServoPin}={setting.ServoRight} > /dev/servoblaster'";
+            Console.WriteLine(servo.Arguments);
+            var proc = Process.Start(servo);
+            proc.WaitForExit();
+            Console.WriteLine(proc.StandardOutput.ReadToEnd());
+            Console.WriteLine(proc.StandardError.ReadToEnd());
+
+            proc.Close();
+#endif
         }
 
         private void Left()
         {
             Console.WriteLine("Left");
-            survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoLeft}");
+#if !DEBUG
+            servo.Arguments = $"-c 'echo {setting.ServoPin}={setting.ServoLeft} > /dev/servoblaster'";
+            Console.WriteLine(servo.Arguments);
+            var proc = Process.Start(servo);
+            proc.WaitForExit();
+            Console.WriteLine(proc.StandardOutput.ReadToEnd());
+            Console.WriteLine(proc.StandardError.ReadToEnd());
+
+            proc.Close();
+#endif
         }
 
         private void Straight()
         {
             Console.WriteLine("Straight");
-            survoWriter.WriteLine($"{setting.ServoPin}={setting.ServoStraight}");
+#if !DEBUG
+            servo.Arguments = $"-c 'echo {setting.ServoPin}={setting.ServoStraight} > /dev/servoblaster'";
+            Console.WriteLine(servo.Arguments);
+            var proc = Process.Start(servo);
+            
+            proc.WaitForExit();
+            Console.WriteLine(proc.StandardOutput.ReadToEnd());
+            Console.WriteLine(proc.StandardError.ReadToEnd());
+            proc.Close();
+#endif
         }
     }
 }

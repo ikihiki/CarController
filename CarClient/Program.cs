@@ -50,6 +50,7 @@ namespace CarClient
 
             try
             {
+                Console.WriteLine("Ready");
 
                 string ipaddress = "";
                 IPHostEntry ipentry = Dns.GetHostEntry(Dns.GetHostName());
